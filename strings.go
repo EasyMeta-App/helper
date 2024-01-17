@@ -144,6 +144,22 @@ func Base64Decode(content string) string {
 	return content
 }
 
+// CompleteBase64URLSafe adjusts a Base64 URL-safe encoded string by replacing
+// '-' with '+', '_' with '/', and adding missing padding '=' characters
+func CompleteBase64URLSafe(s string) string {
+	// Replace URL-safe characters
+	s = strings.ReplaceAll(s, "-", "+")
+	s = strings.ReplaceAll(s, "_", "/")
+
+	// Add padding if necessary
+	padding := len(s) % 4
+	if padding > 0 {
+		s += strings.Repeat("=", 4-padding)
+	}
+
+	return s
+}
+
 // HiddenBotToken is hidden bot token
 func HiddenBotToken(s string) string {
 	return regexp.MustCompile(`\/(bot)?(\d+):([^/]+)\/?`).ReplaceAllString(s, "/$1$2:***********************************/")
